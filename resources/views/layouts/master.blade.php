@@ -106,32 +106,41 @@
           </li>
 
           <li class="nav-item">
-                <router-link to="/profile" class="nav-link">
-                    <i class="nav-icon fas fa-user orange"></i>
-                    <p>
-                      Profile
-                        
-                    </p>
-                </router-link>
-                </a>
-              </li>
+            <router-link to="/profile" class="nav-link">
+              <i class="nav-icon fas fa-user orange"></i>
+              <p>
+                Profile  
+              </p>
+            </router-link>
+            
+          </li>
 
-              <li class="nav-item">
+          <li class="nav-item">
+            <router-link to="/developer" class="nav-link">
+              <i class="nav-icon fas fa-cogs"></i>
+              <p>
+                Developer  
+              </p>
+            </router-link>
+            
+          </li>
+
+          <li class="nav-item">
+          
+            <a class="nav-link" href="{{ route('logout') }}"
+              onclick="event.preventDefault();
+                document.getElementById('logout-form').submit();">
+                <i class="nav-icon fa fa-power-off red"></i>
+                <p>
+                  {{ __('Logout') }}
+                </p>
               
-                <a class="nav-link" href="{{ route('logout') }}"
-                  onclick="event.preventDefault();
-                    document.getElementById('logout-form').submit();">
-                    <i class="nav-icon fa fa-power-off red"></i>
-                    <p>
-                      {{ __('Logout') }}
-                    </p>
-                  
-                </a>
+            </a>
 
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-              </li>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+          </li>
           
         </ul>
       </nav>
@@ -147,6 +156,8 @@
     <div class="content">
       <div class="container-fluid">
         <router-view></router-view>
+
+        <vue-progress-bar></vue-progress-bar>
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
