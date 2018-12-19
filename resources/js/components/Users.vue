@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row mt-5">
+        <div class="row mt-5" v-if="$gate.isAdminOrAuthor()">
             <div class="col-md-12">
                 <div class="box">
                     <div class="box-header">
@@ -23,7 +23,7 @@
                                 <th>Registered At</th>
                                 <th>Modify</th>
                             </tr>
-                            <tr v-for="user in users" :key="user.id">
+                            <tr v-for="user in users.data" :key="user.id">
                                 <td>{{user.id}}</td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
@@ -34,14 +34,22 @@
                                     <a href="#" @click="deleteUser(user.id)"><i class="fa fa-trash red"></i></a>
                                 </td>
                             </tr>
-                        
-                        
+
+
                         </tbody></table>
                     </div>
                     <!-- /.box-body -->
+                    <div class="card-footer">
+                        <pagination :data="users" @pagination-change-page="getResults"></pagination>
+
+                    </div>
                 </div>
             <!-- /.box -->
             </div>
+        </div>
+
+        <div v-if="!$gate.isAdminOrAuthor()">
+            <not-found></not-found>
         </div>
 
         <!-- Modal -->
@@ -86,10 +94,10 @@
 
                             <div class="form-group">
                                 <input v-model="form.password" type="password" name="password" id="password"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
+                                class="form-control" placeholder="Password" :class="{ 'is-invalid': form.errors.has('password') }">
                                 <has-error :form="form" field="password"></has-error>
-                            </div>          
-                    
+                            </div>
+
                         </div>
 
                         <div class="modal-footer">
@@ -99,15 +107,15 @@
                         </div>
 
                     </form>
-                    
-                    
-                    
+
+
+
                 </div>
             </div>
         </div>
     </div>
 
-    
+
 </template>
 
 <script>
@@ -128,6 +136,12 @@
             }
         },
         methods: {
+            getResults(page = 1) {
+                axios.get('api/user?page=' + page)
+                    .then(response => {
+                        this.users = response.data;
+                    });
+		    },
             updateUser() {
                 this.$Progress.start();
                 this.form.put('api/user/'+this.form.id)
@@ -139,7 +153,7 @@
                         'success'
                         )
                         this.$Progress.finish();
-                         Fire.$emit('AfterCreate');                  
+                         Fire.$emit('AfterCreate');
 
                 })
                 .catch(()=>{
@@ -161,7 +175,11 @@
             },
 
             loadUsers(){
-                axios.get("api/user").then(({ data }) => (this.users = data.data));
+                if (this.$gate.isAdminOrAuthor()) {
+
+                    axios.get("api/user").then(({ data }) => (this.users = data));
+                }
+
 
             },
             deleteUser(id){
@@ -197,7 +215,7 @@
 
                     Fire.$emit('AfterCreate');
                     $('#addNew').modal('hide');
-                
+
                     toast({
                         type: 'success',
                         title: 'User Created Successfully'
@@ -208,8 +226,8 @@
                 .catch(()=>{
 
                 });
-                
-                
+
+
             }
         },
         created() {

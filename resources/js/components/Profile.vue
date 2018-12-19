@@ -17,11 +17,11 @@
                 <div class="card card-widget widget-user">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header text-white" style="background-image:url('./img/user-cover.jpg')">
-                        <h3 class="widget-user-username">Elizabeth Pierce</h3>
-                        <h5 class="widget-user-desc">Web Designer</h5>
+                        <h3 class="widget-user-username">{{form.name}}</h3>
+                        <h5 class="widget-user-desc">{{form.type}}</h5>
                     </div>
                     <div class="widget-user-image">
-                        <img class="img-circle" src="" alt="User Avatar">
+                        <img class="img-circle" :src="getProfilePhoto()" alt="User Avatar">
                     </div>
                     <div class="card-footer">
                         <div class="row">
@@ -53,7 +53,7 @@
                         <!-- /.row -->
                     </div>
                 </div>
-               
+
             </div>
 
             <!-- tabs -->
@@ -88,7 +88,7 @@
                                     <div class="col-sm-12">
                                         <input type="email" v-model="form.email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="inputEmail" placeholder="Email" >
                                         <has-error :form="form" field="email"></has-error>
-                                     
+
                                     </div>
                                 </div>
 
@@ -118,10 +118,10 @@
                                             :class="{ 'is-invalid': form.errors.has('password') }"
                                             id="password"
                                             placeholder="Password"
-                                
+
                                         >
                                         <has-error :form="form" field="password"></has-error>
-                                     
+
                                     </div>
                                 </div>
 
@@ -166,9 +166,14 @@
 
         methods: {
 
+            getProfilePhoto() {
+                let photo = (this.form.photo.length > 100) ? this.form.photo : "img/profile/" + this.form.photo;
+                return photo;
+                //return "img/profile/" + this.form.photo;
+            },
             updateProfile(e) {
-                
-                
+
+
                 let file = e.target.files[0];
                 console.log(file);
                 let reader = new FileReader();
@@ -180,7 +185,7 @@
                     this.form.photo = reader.result;
                     }
                     reader.readAsDataURL(file);
-                    
+
                 }else {
                     swal({
                             type: 'error',
@@ -189,8 +194,8 @@
                         })
                 }
 
-                
-                
+
+
             },
 
             updateInfo() {
@@ -200,18 +205,27 @@
                 this.$Progress.start();
                 this.form.put('api/profile')
                 .then(() => {
+                    Fire.$emit('AfterCreate');
                     this.$Progress.finish();
                 })
                 .catch(() => {
                     this.$Progress.fail();
                 })
+            },
+
+            loadProfile() {
+                axios.get("api/profile")
+                    .then(({ data }) => (this.form.fill(data)));
             }
 
         },
 
         created() {
-            axios.get("api/profile")
-                .then(({ data }) => (this.form.fill(data)));
+            this.loadProfile();
+
+            Fire.$on('AfterCreate', ()=> {
+                this.loadProfile();
+            })
         }
     }
 </script>

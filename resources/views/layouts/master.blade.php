@@ -8,9 +8,9 @@
   <title>AdminLTE 3 | Starter</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  
+
   <link rel="stylesheet" href="/css/app.css">
-  
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper" id="app">
@@ -42,7 +42,7 @@
       </div>
     </form>
 
-   
+
   </nav>
   <!-- /.navbar -->
 
@@ -63,7 +63,12 @@
           <img src="./img/profile.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+          <a href="#" class="d-block">
+            {{ Auth::user()->name }}
+            <p>{{ Auth::user()->type }}</p>
+
+          </a>
+
         </div>
       </div>
 
@@ -77,56 +82,58 @@
                 <router-link to="/dashboard" class="nav-link">
                     <i class="nav-icon fas fa-tachometer-alt blue"></i>
                     <p>
-                        Dashboard      
+                        Dashboard
                     </p>
                 </router-link>
                 </a>
             </li>
 
-            
-
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fa fa-cog green"></i>
-              <p>
-                Management
-                <i class="right fa fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/users" class="nav-link">
-                  <i class="fas fa-users nav-icon"></i>
-                  <p>Users</p>
+            <li class="nav-item">
+                <router-link to="/profile" class="nav-link">
+                <i class="nav-icon fas fa-user orange"></i>
+                <p>
+                    Profile
+                </p>
                 </router-link>
-              </li>
-              
-              
-            </ul>
-          </li>
+
+            </li>
+
+
+          @can('isAdmin')
+            <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-cog green"></i>
+                <p>
+                    Management
+                    <i class="right fa fa-angle-left"></i>
+                </p>
+                </a>
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <router-link to="/users" class="nav-link">
+                    <i class="fas fa-users nav-icon"></i>
+                    <p>Users</p>
+                    </router-link>
+                </li>
+
+
+                </ul>
+            </li>
+
+
+            <li class="nav-item">
+                <router-link to="/developer" class="nav-link">
+                    <i class="nav-icon fas fa-cogs"></i>
+                    <p>
+                        Developer
+                    </p>
+                </router-link>
+
+            </li>
+          @endcan
 
           <li class="nav-item">
-            <router-link to="/profile" class="nav-link">
-              <i class="nav-icon fas fa-user orange"></i>
-              <p>
-                Profile  
-              </p>
-            </router-link>
-            
-          </li>
 
-          <li class="nav-item">
-            <router-link to="/developer" class="nav-link">
-              <i class="nav-icon fas fa-cogs"></i>
-              <p>
-                Developer  
-              </p>
-            </router-link>
-            
-          </li>
-
-          <li class="nav-item">
-          
             <a class="nav-link" href="{{ route('logout') }}"
               onclick="event.preventDefault();
                 document.getElementById('logout-form').submit();">
@@ -134,14 +141,14 @@
                 <p>
                   {{ __('Logout') }}
                 </p>
-              
+
             </a>
 
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>
           </li>
-          
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -151,7 +158,7 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    
+
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
@@ -177,6 +184,14 @@
   </footer>
 </div>
 <!-- ./wrapper -->
+
+@auth
+    <script>
+        window.user = @json(auth()->user())
+    </script>
+
+@endauth
+
 <script src="/js/app.js"></script>
 {{--  <script src="{{ mix('js/app.js') }}"></script>   --}}
 </body>
