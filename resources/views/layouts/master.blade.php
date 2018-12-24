@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>AdminLTE 3 | Starter</title>
+  <title>LaraStart</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
@@ -23,7 +23,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="#" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -31,16 +31,14 @@
     </ul>
 
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
-      <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+    <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" v-model="search" type="search" @keyup="searchit" placeholder="Search" aria-label="Search">
         <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
+            <button class="btn btn-navbar" @click="searchit">
             <i class="fa fa-search"></i>
-          </button>
+            </button>
         </div>
-      </div>
-    </form>
+    </div>
 
 
   </nav>
@@ -49,7 +47,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="#" class="brand-link">
       <img src="./img/logo.png" alt="LaraStart Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
       <span class="brand-text font-weight-light">Lara Start</span>
